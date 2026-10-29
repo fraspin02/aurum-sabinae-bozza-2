@@ -1,5 +1,5 @@
 (function () {
-  var header = document.querySelector('.site-header');
+  var header = document.querySelector('.hd');
   var btn = document.querySelector('.menu-btn');
   var mnav = document.getElementById('mobile-nav');
 
@@ -24,6 +24,16 @@
   var onScroll = function () { header && header.classList.toggle('is-scrolled', window.scrollY > 8); };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+
+  // filtri del blog
+  var posts = document.querySelector('[data-posts]');
+  document.querySelectorAll('.filter').forEach(function (f, _, all) {
+    f.setAttribute('aria-pressed', String(f.classList.contains('is-on')));
+    f.addEventListener('click', function () {
+      all.forEach(function (x) { x.classList.toggle('is-on', x === f); x.setAttribute('aria-pressed', String(x === f)); });
+      posts.querySelectorAll('.post').forEach(function (p) { p.hidden = !!f.dataset.cat && p.dataset.cat !== f.dataset.cat; });
+    });
+  });
 
   // comparsa leggera, solo se il browser la supporta
   var els = document.querySelectorAll('.reveal');

@@ -1,0 +1,568 @@
+"""Genera le pagine statiche della bozza: python _src/build.py"""
+from html import escape
+from pathlib import Path
+
+from articoli import ARTICOLI
+
+ROOT = Path(__file__).resolve().parent.parent
+V = "4"  # versione per la cache di css/js
+TEL = "+393286268470"
+WA = "https://wa.me/393286268470"
+WA_INFO = WA + "?text=Buongiorno%2C%20vorrei%20informazioni%20sull%27olio%20Aurum%20Sabinae"
+FONTS = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap"
+
+SPRITE = """<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.5-.3z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13 17 22l-5-3-5 3 1.5-9"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h10M4 17h16"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1.2 13H4.8L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h12v10H2zM14 10h4l3 3v3h-7z"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4C9 4 4 9 4 16c0 1.4.2 2.7.6 4C11 20 20 16 20 4z"/><path d="M4.6 20C8 15 12 12 16 9"/></symbol>
+</svg>"""
+
+
+def nav_items(home):
+    h = "" if home else "index.html"
+    return [
+        (f"{h}#shop", "I nostri oli"),
+        (f"{h}#famiglia", "La famiglia"),
+        (f"{h}#premi", "Premi"),
+        (f"{h}#frutta", "Frutta e orto"),
+        ("blog.html", "Blog"),
+        (f"{h}#contatti", "Contatti"),
+    ]
+
+
+CUR = ' aria-current="page"'
+
+
+def header(home, attivo=""):
+    items = "".join(
+        f'<li><a href="{u}"{CUR if t == attivo else ""}>{t}</a></li>'
+        for u, t in nav_items(home)
+    )
+    return f"""<a class="skip" href="#contenuto">Vai al contenuto</a>
+<header class="hd">
+  <div class="wrap hd__in">
+    <button class="icon-btn menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Apri il menu">
+      <svg aria-hidden="true"><use href="#i-menu"/></svg>
+    </button>
+    <a class="brand" href="index.html" aria-label="Azienda Agricola Altobelli, Aurum Sabinae: home">
+      <img src="img/logo-altobelli.svg" width="470" height="210" alt="">
+    </a>
+    <nav class="nav" aria-label="Principale"><ul>{items}</ul></nav>
+    <div class="hd__actions">
+      <a class="icon-btn" href="tel:{TEL}" aria-label="Chiama Aurum Sabinae">
+        <svg aria-hidden="true"><use href="#i-phone"/></svg>
+      </a>
+      <a class="icon-btn cart-btn" href="cassa.html" aria-label="Carrello">
+        <svg aria-hidden="true"><use href="#i-bag"/></svg><span class="cart-count" data-cart-count hidden>0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobile-nav" role="dialog" aria-modal="true" aria-label="Menu" hidden>
+  <div class="mobile-nav__top">
+    <button class="icon-btn menu-close" type="button" aria-label="Chiudi il menu"><svg aria-hidden="true"><use href="#i-x"/></svg></button>
+  </div>
+  <nav aria-label="Menu mobile"><ul>{items}<li><a href="cassa.html">Carrello e cassa</a></li></ul></nav>
+  <div class="mobile-nav__contacts">
+    <a class="btn btn--ghost" href="tel:{TEL}"><svg aria-hidden="true"><use href="#i-phone"/></svg>Chiama</a>
+    <a class="btn" href="{WA}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+  </div>
+</div>"""
+
+
+CART = f"""<div class="cart" id="cart" hidden>
+  <div class="cart__backdrop"></div>
+  <aside class="cart__panel" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+    <div class="cart__head">
+      <h2 id="cart-title">Il tuo carrello</h2>
+      <button class="icon-btn cart__close" type="button" aria-label="Chiudi il carrello"><svg aria-hidden="true"><use href="#i-x"/></svg></button>
+    </div>
+    <p class="ship-note" data-ship-note></p>
+    <div class="ship-bar"><span></span></div>
+    <ul class="cart__lines" data-cart-lines></ul>
+    <div class="cart__foot">
+      <p class="cart__row"><span>Subtotale</span><b data-sub>0,00 €</b></p>
+      <p class="cart__row cart__row--muted"><span>Spedizione</span><span data-ship>Gratis</span></p>
+      <a class="btn btn--block" href="cassa.html" data-checkout><svg aria-hidden="true"><use href="#i-lock"/></svg>Vai alla cassa</a>
+      <button class="link-btn cart__close" type="button">Continua gli acquisti</button>
+    </div>
+  </aside>
+</div>
+<div class="toast" id="toast" role="status"></div>"""
+
+
+def footer(home):
+    links = "".join(f'<li><a href="{u}">{t}</a></li>' for u, t in nav_items(home))
+    return f"""<footer class="ft">
+  <div class="wrap ft__grid">
+    <div class="ft__brand">
+      <img src="img/logo-altobelli.svg" width="470" height="210" alt="Azienda Agricola Altobelli" loading="lazy">
+      <p>Olio extravergine Sabina DOP, monocultivar e frutta di stagione da Montelibretti, dagli anni '50.</p>
+    </div>
+    <nav aria-label="Pie di pagina"><h2>Il sito</h2><ul>{links}</ul></nav>
+    <div>
+      <h2>Contatti</h2>
+      <ul>
+        <li><a href="tel:{TEL}">328 626 8470</a> (anche WhatsApp)</li>
+        <li><a href="tel:+390774609221">0774 609221</a></li>
+        <li><a href="mailto:info@aurumsabinae.it">info@aurumsabinae.it</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Azienda</h2>
+      <ul>
+        <li>Azienda Agricola Altobelli Leonardo</li>
+        <li>Via Dante Alighieri 23, 00010 Montelibretti (RM)</li>
+        <li>P.IVA 05869901008</li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap ft__bottom"><p>© 2026 Aurum Sabinae</p><p>Bozza di proposta, non indicizzata.</p></div>
+</footer>"""
+
+
+def page(nome, titolo, descr, body, home=False, attivo="", preload="", shop=True):
+    js = f'<script src="js/main.js?v={V}" defer></script>'
+    if shop:
+        js += f'\n<script src="js/shop.js?v={V}" defer></script>'
+    html = f"""<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>{escape(titolo)}</title>
+  <meta name="description" content="{escape(descr)}">
+  <meta name="theme-color" content="#F3F3EC">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="{FONTS}" rel="stylesheet">
+  {preload}
+  <link rel="stylesheet" href="css/style.css?v={V}">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M28 4C14 4 4 10 4 22c0 2 .4 4 1 6C20 28 28 18 28 4z' fill='%232E4B20'/%3E%3C/svg%3E">
+</head>
+<body>
+{SPRITE}
+
+{header(home, attivo)}
+
+<main id="contenuto">
+{body}
+</main>
+
+{CART if shop else ""}
+
+{footer(home)}
+
+{js}
+</body>
+</html>
+"""
+    (ROOT / nome).write_text(html, encoding="utf-8")
+    print("scritto", nome)
+
+
+def blog_card(a, heading="h3"):
+    return f"""<article class="post">
+  <a class="post__img" href="articolo-{a['slug']}.html" tabindex="-1" aria-hidden="true">
+    <img src="img/{a['img']}" width="{a['w']}" height="{a['h']}" alt="" loading="lazy">
+  </a>
+  <div class="post__body">
+    <p class="post__meta"><span class="chip">{a['cat']}</span><time datetime="{a['data']}">{a['data_it']}</time></p>
+    <{heading}><a href="articolo-{a['slug']}.html">{escape(a['titolo'])}</a></{heading}>
+    <p>{escape(a['sommario'])}</p>
+  </div>
+</article>"""
+
+
+# ---------------------------------------------------------------- home
+HOME = f"""
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero__in">
+      <div class="hero__text">
+        <p class="eyebrow">Sabina DOP · Montelibretti (RM)</p>
+        <h1 id="hero-title">Aurum Sabinae, <em>olio extravergine</em> della famiglia Altobelli</h1>
+        <p class="lead">Olio della Sabina, monocultivar e frutta di stagione dai nostri terreni, coltivati dalla stessa famiglia dagli anni '50.</p>
+        <div class="hero__actions">
+          <a class="btn" href="#shop"><svg aria-hidden="true"><use href="#i-bag"/></svg>Scopri gli oli</a>
+          <a class="btn btn--ghost" href="{WA_INFO}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Scrivici su WhatsApp</a>
+        </div>
+      </div>
+      <figure class="hero__media">
+        <img class="leaf" src="img/hero-bottiglia-560.webp" srcset="img/hero-bottiglia-560.webp 560w, img/hero-bottiglia-772.webp 772w" sizes="(min-width: 900px) 420px, 78vw" width="560" height="746" alt="Bottiglia di olio extravergine Aurum Sabinae Sabina DOP su una mensola di legno" fetchpriority="high">
+        <figcaption class="seal"><b>DOP</b>dal 2001</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="method" aria-labelledby="metodo-title">
+    <div class="wrap">
+      <div class="method__head">
+        <p class="eyebrow eyebrow--light">Come lavoriamo</p>
+        <h2 id="metodo-title">Qualità e freschezza, ogni anno</h2>
+        <p>Il nostro lavoro è preservare al meglio i biofenoli delle olive: danno all'olio il suo amaro, il suo piccante e la sua freschezza.</p>
+      </div>
+      <ol class="method__list">
+        <li><span class="num">01</span><h3>Raccolta precoce</h3><p>Raccogliamo presto, quando i profumi sono più vivi. Per il Primo Raccolto si comincia ancora prima.</p></li>
+        <li><span class="num">02</span><h3>Spremitura immediata</h3><p>Le olive vanno al frantoio subito dopo la raccolta ed estratte a freddo, senza attese.</p></li>
+        <li><span class="num">03</span><h3>Senza ossigeno</h3><p>L'olio si conserva al riparo dall'aria e arriva in bottiglia come è uscito dal frantoio.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="shop" aria-labelledby="shop-title">
+    <div class="wrap">
+      <div class="section-head section-head--row">
+        <div>
+          <p class="eyebrow">Shop</p>
+          <h2 id="shop-title">I nostri oli, dal frantoio a casa tua</h2>
+        </div>
+        <p class="lead">Leccino, Carboncella, Frantoio e Salviana: le varietà della Sabina, raccolte tra ottobre e novembre.</p>
+      </div>
+      <ul class="perks-row">
+        <li><svg aria-hidden="true"><use href="#i-truck"/></svg><span><b>Spedizione in tutta Italia</b>gratuita sopra 59 €</span></li>
+        <li><svg aria-hidden="true"><use href="#i-leaf"/></svg><span><b>Dal produttore</b>senza intermediari</span></li>
+        <li><svg aria-hidden="true"><use href="#i-lock"/></svg><span><b>Pagamento sicuro</b>carta, PayPal, bonifico</span></li>
+      </ul>
+      <div class="shop-grid" data-shop></div>
+      <aside class="b2b">
+        <div>
+          <p class="eyebrow">Ristoranti, botteghe e GAS</p>
+          <h3>Forniture e gruppi d'acquisto</h3>
+          <p>Prepariamo forniture per ristoranti, negozi e gruppi d'acquisto. Chiamaci per quantità, formati e listino.</p>
+        </div>
+        <a class="btn btn--ghost" href="tel:{TEL}"><svg aria-hidden="true"><use href="#i-phone"/></svg>Chiamaci</a>
+      </aside>
+    </div>
+  </section>
+
+  <section class="novello" aria-labelledby="novello-title">
+    <div class="wrap novello__in">
+      <img class="leaf leaf--alt" src="img/olio-verde-788.webp" width="788" height="588" alt="Olio novello verde intenso appena spremuto" loading="lazy">
+      <div>
+        <p class="eyebrow eyebrow--light">Ottobre – novembre</p>
+        <h2 id="novello-title">Spremute, il nostro olio novello</h2>
+        <p>Per chi aspetta da giorni la prima bruschetta dell'anno: olio freschissimo, torbido e denso, appena uscito dal frantoio.</p>
+        <p>Disponibile solo nelle settimane della raccolta, finché dura.</p>
+        <button class="btn btn--oil" type="button" data-reserve><svg aria-hidden="true"><use href="#i-bag"/></svg>Prenota il novello</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="famiglia" aria-labelledby="famiglia-title">
+    <div class="wrap story">
+      <div>
+        <p class="eyebrow">La famiglia Altobelli</p>
+        <h2 id="famiglia-title">Tutto è cominciato con nonno Lallo</h2>
+        <blockquote class="quote">
+          <p>In quegli anni mio nonno, tornato dalla Guerra, decise di rinunciare a un posto fisso che lo stato riservava ai reduci, per dedicarsi anima e corpo alla coltivazione dei terreni di famiglia.</p>
+          <cite>Leonardo Altobelli</cite>
+        </blockquote>
+        <p>Da allora l'azienda coltiva olio e frutta a Montelibretti, nella Sabina Romana. La stessa dedizione oggi serve a far conoscere l'olio sabino per quello che è: un prodotto di alta qualità.</p>
+      </div>
+      <ol class="timeline">
+        <li><b>Anni '50</b><span>Lallo, il fondatore, sceglie la terra di famiglia: olio e frutta.</span></li>
+        <li><b>2001</b><span>Il primo olio a Denominazione di Origine Protetta Sabina.</span></li>
+        <li><b>2012</b><span>Nascono gli oli monovarietali, le Pepite d'Aurum.</span></li>
+        <li><b>2013</b><span>I primi esperimenti di frangitura con le erbe selvatiche: arriva RucOlio.</span></li>
+        <li><b>Oggi</b><span>Nuove idee in cantiere, sempre dalla stessa terra.</span></li>
+      </ol>
+    </div>
+    <div class="wrap">
+      <figure class="territory">
+        <img src="img/sabina-colline-900.webp" srcset="img/sabina-colline-900.webp 900w, img/sabina-colline-1400.webp 1400w" sizes="(min-width: 1240px) 1176px, 94vw" width="900" height="506" alt="Panorama sulle colline della Sabina" loading="lazy">
+        <figcaption>Le colline della Sabina. Foto: Christoph Strässler, CC BY-SA 2.0, via Wikimedia Commons.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section section--tint" id="premi" aria-labelledby="premi-title">
+    <div class="wrap">
+      <div class="section-head section-head--row">
+        <div>
+          <p class="eyebrow">Riconoscimenti</p>
+          <h2 id="premi-title">Premiati ai concorsi nazionali dal 2005</h2>
+        </div>
+        <p class="lead">Giurie e guide di settore hanno riconosciuto i nostri oli per più di dieci anni di fila.</p>
+      </div>
+      <div class="prizes">
+        <article class="prize"><span class="prize__year">2016</span><h3>Slow Food, "Grande Olio"</h3><p>Pepite d'Aurum Frantoio tra i Grandi Oli della guida Oli d'Italia, su 700 oli recensiti.</p></article>
+        <article class="prize"><span class="prize__year">2013 · 2014</span><h3>Gambero Rosso, 3 olive</h3><p>Tre olive nella guida Oli d'Italia per due edizioni consecutive.</p></article>
+        <article class="prize"><span class="prize__year">2005</span><h3>Sirena d'Oro, 1° premio</h3><p>Primo premio al Concorso Nazionale degli oli DOP di Sorrento, fruttato leggero.</p></article>
+      </div>
+      <div class="awards-list">
+        <details>
+          <summary>Tutti i premi 2012 – 2016</summary>
+          <ul>
+            <li><b>2016</b> Guida Oli d'Italia Slow Food: "Grande Olio" al monocultivar Frantoio</li>
+            <li><b>2015</b> Catalogo degli oli monovarietali ASSAM Marche: selezionato il Carboncella</li>
+            <li><b>2014</b> Aipo d'Argento: Gran Menzione al Carboncella, categoria monovarietale</li>
+            <li><b>2013</b> 3 olive Gambero Rosso, guida Oli d'Italia 2014</li>
+            <li><b>2012</b> Orciolo d'Oro: Distinzione DOP fruttato leggero a Primo Raccolto e Aurum Sabinae</li>
+            <li><b>2012</b> Aipo d'Argento: Gran Menzione, olio DOP fruttato intenso</li>
+            <li><b>2012</b> Orii del Lazio: Menzione Speciale, Sabina DOP fruttato medio</li>
+            <li><b>2012</b> Ercole Olivario: finalista</li>
+            <li><b>2012</b> 3 olive Gambero Rosso, guida Oli d'Italia 2013</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Tutti i premi 2005 – 2011</summary>
+          <ul>
+            <li><b>2011</b> Orciolo d'Oro: Gran Menzione, fruttato leggero</li>
+            <li><b>2010</b> Migliori oli del Lazio, DOP Sabina fruttato leggero: 2° premio</li>
+            <li><b>2010</b> Orciolo d'Oro: Distinzione, fruttato leggero</li>
+            <li><b>2009</b> Migliori oli del Lazio, DOP Sabina fruttato leggero: 1° premio</li>
+            <li><b>2009</b> Orciolo d'Oro DOP e IGP: Gran Menzione, fruttato leggero</li>
+            <li><b>2008</b> Orciolo d'Oro: Distinzione, fruttato leggero</li>
+            <li><b>2007</b> Migliori oli del Lazio, DOP Sabina fruttato intenso: 1° premio</li>
+            <li><b>2007</b> Sirena d'Oro di Sorrento: Menzione di merito</li>
+            <li><b>2006</b> Migliori oli del Lazio, DOP Sabina fruttato intenso: 1° premio</li>
+            <li><b>2006</b> Orciolo d'Oro: 1° premio, fruttato leggero</li>
+            <li><b>2006</b> Sirena d'Oro di Sorrento: Menzione di merito</li>
+            <li><b>2005</b> Sirena d'Oro di Sorrento, oli DOP: 1° premio, fruttato leggero</li>
+          </ul>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="frutta" aria-labelledby="frutta-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Frutta e orto</p>
+        <h2 id="frutta-title">Non solo olio</h2>
+        <p class="lead">Accanto agli ulivi coltiviamo frutta e ortaggi di stagione, da sempre parte dell'azienda.</p>
+      </div>
+      <div class="fruit-grid">
+        <article class="fruit fruit--wide">
+          <img src="img/ciliegie-408.webp" width="408" height="330" alt="Cestino di ciliegie rosse Aurum Sabinae" loading="lazy">
+          <div><span class="chip">Fine primavera</span><h3>Ciliegie</h3><p>Le produciamo da oltre dieci anni, in una zona molto vocata. "Le cerase: una tira l'altra."</p></div>
+        </article>
+        <article class="fruit">
+          <img src="img/topinambur-600.webp" width="600" height="480" alt="Tuberi di topinambur appena raccolti" loading="lazy">
+          <div><span class="chip">Ortaggi</span><h3>Topinambur</h3><p>Tubero di origine nordamericana che si adatta bene alle nostre terre.</p></div>
+        </article>
+        <article class="fruit fruit--herbs">
+          <div><span class="chip">Raccolte a mano</span><h3>Erbe amare di campo</h3><p>Erbe selvatiche commestibili che crescono spontanee nei nostri campi.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint" id="blog-home" aria-labelledby="blog-title">
+    <div class="wrap">
+      <div class="section-head section-head--row">
+        <div>
+          <p class="eyebrow">Dal blog</p>
+          <h2 id="blog-title">Notizie dal campo e dal frantoio</h2>
+        </div>
+        <a class="link-arrow" href="blog.html">Tutti gli articoli<svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="post-grid">
+        {''.join(blog_card(a) for a in ARTICOLI[:3])}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="contatti" aria-labelledby="contatti-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Dove trovarci</p>
+        <h2 id="contatti-title">In Sabina, a Roma, o a casa tua</h2>
+      </div>
+      <div class="places">
+        <div class="place">
+          <h3>L'azienda</h3>
+          <address>Via Dante Alighieri 23<br>00010 Montelibretti (RM)</address>
+          <p>Per visite e ritiro in azienda, chiamaci prima.</p>
+          <a class="link-arrow" href="https://www.google.com/maps/search/?api=1&amp;query=Via+Dante+Alighieri+23%2C+00010+Montelibretti+RM" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-pin"/></svg>Apri in Maps</a>
+        </div>
+        <div class="place">
+          <h3>Mercato Trieste</h3>
+          <address>Via Chiana 109<br>00199 Roma</address>
+          <p>Il nostro banco con ortaggi, frutta e prodotti dell'azienda.</p>
+          <a class="link-arrow" href="https://www.google.com/maps/search/?api=1&amp;query=Mercato+Trieste+Via+Chiana+109+Roma" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-pin"/></svg>Apri in Maps</a>
+        </div>
+        <div class="place">
+          <h3>Spedizioni e GAS</h3>
+          <address>In tutta Italia</address>
+          <p>Spedizioni, gruppi d'acquisto e forniture: contattaci per quantità e tempi.</p>
+          <a class="link-arrow" href="#shop"><svg aria-hidden="true"><use href="#i-arrow"/></svg>Vai allo shop</a>
+        </div>
+      </div>
+      <div class="contact">
+        <div>
+          <h3>Parla direttamente con Leonardo</h3>
+          <p>Ordini, disponibilità del novello, visite in azienda: rispondiamo noi, senza intermediari.</p>
+        </div>
+        <div class="contact__links">
+          <a class="contact-item" href="{WA}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span><small>Cellulare e WhatsApp</small><strong>328 626 8470</strong></span></a>
+          <a class="contact-item" href="tel:+390774609221"><svg aria-hidden="true"><use href="#i-phone"/></svg><span><small>Telefono fisso</small><strong>0774 609221</strong></span></a>
+          <a class="contact-item" href="mailto:info@aurumsabinae.it"><svg aria-hidden="true"><use href="#i-mail"/></svg><span><small>Email</small><strong>info@aurumsabinae.it</strong></span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+"""
+
+PRELOAD_HERO = '<link rel="preload" as="image" href="img/hero-bottiglia-560.webp" imagesrcset="img/hero-bottiglia-560.webp 560w, img/hero-bottiglia-772.webp 772w" imagesizes="(min-width: 900px) 420px, 78vw" fetchpriority="high">'
+
+page("index.html", "Aurum Sabinae · Olio extravergine Sabina DOP da Montelibretti",
+     "Azienda Agricola Altobelli: olio extravergine Sabina DOP, monocultivar Pepite d'Aurum, RucOlio e frutta di stagione, da Montelibretti nella Sabina Romana.",
+     HOME, home=True, preload=PRELOAD_HERO)
+
+# ---------------------------------------------------------------- prodotto
+page("prodotto.html", "Olio · Aurum Sabinae", "Scheda prodotto degli oli extravergini Aurum Sabinae.", """
+  <section class="section section--top">
+    <div class="wrap pd" data-product></div>
+  </section>
+  <section class="section section--tint" aria-labelledby="altri-title">
+    <div class="wrap">
+      <h2 id="altri-title" class="h-sm">Potrebbe piacerti anche</h2>
+      <div class="shop-grid" data-others></div>
+    </div>
+  </section>
+""", attivo="I nostri oli")
+
+# ---------------------------------------------------------------- cassa
+page("cassa.html", "Cassa · Aurum Sabinae", "Completa il tuo ordine di olio Aurum Sabinae.", f"""
+  <section class="section section--top" aria-labelledby="cassa-title">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Percorso"><a href="index.html">Home</a><span aria-hidden="true">/</span><a href="index.html#shop">Shop</a><span aria-hidden="true">/</span><span>Cassa</span></nav>
+      <h1 id="cassa-title" class="h-page">Cassa</h1>
+      <div class="checkout">
+        <form id="checkout" class="checkout__form" novalidate>
+          <fieldset>
+            <legend>1. I tuoi dati</legend>
+            <div class="field-row">
+              <div class="field"><label for="c-nome">Nome e cognome</label><input id="c-nome" autocomplete="name"></div>
+              <div class="field"><label for="c-tel">Telefono</label><input id="c-tel" type="tel" autocomplete="tel" inputmode="tel"></div>
+            </div>
+            <div class="field"><label for="c-mail">Email</label><input id="c-mail" type="email" autocomplete="email"><p class="hint">Ti mandiamo qui la conferma dell'ordine.</p></div>
+          </fieldset>
+          <fieldset>
+            <legend>2. Consegna</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="consegna" value="spedizione" checked><span><b>Spedizione a casa</b>In tutta Italia, gratuita sopra 59 €</span></label>
+              <label class="choice"><input type="radio" name="consegna" value="mercato"><span><b>Ritiro al Mercato Trieste</b>Via Chiana 109, Roma</span></label>
+              <label class="choice"><input type="radio" name="consegna" value="azienda"><span><b>Ritiro in azienda</b>Via Dante Alighieri 23, Montelibretti</span></label>
+            </div>
+            <div data-address>
+              <div class="field"><label for="c-via">Indirizzo</label><input id="c-via" autocomplete="street-address"></div>
+              <div class="field-row field-row--3">
+                <div class="field"><label for="c-cap">CAP</label><input id="c-cap" inputmode="numeric" autocomplete="postal-code"></div>
+                <div class="field"><label for="c-citta">Città</label><input id="c-citta" autocomplete="address-level2"></div>
+                <div class="field"><label for="c-prov">Provincia</label><input id="c-prov" autocomplete="address-level1"></div>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>3. Pagamento</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="pag" checked><span><b>Carta di credito o debito</b>Visa, Mastercard, American Express</span></label>
+              <label class="choice"><input type="radio" name="pag"><span><b>PayPal</b>Paghi con il tuo conto PayPal</span></label>
+              <label class="choice"><input type="radio" name="pag"><span><b>Bonifico bancario</b>Spediamo all'arrivo del pagamento</span></label>
+            </div>
+          </fieldset>
+          <div class="field"><label for="c-note">Note per l'ordine</label><textarea id="c-note" placeholder="Es. confezione regalo, fattura, orari di consegna"></textarea></div>
+          <button class="btn btn--block btn--lg" type="submit"><svg aria-hidden="true"><use href="#i-lock"/></svg>Conferma e paga&nbsp;<span data-total></span></button>
+          <p class="hint center">Preferisci ordinare a voce? <a href="tel:{TEL}">Chiamaci</a> o <a href="{WA}" target="_blank" rel="noopener">scrivici su WhatsApp</a>.</p>
+        </form>
+        <aside class="summary" aria-labelledby="riepilogo-title">
+          <h2 id="riepilogo-title">Riepilogo</h2>
+          <ul class="cart__lines" data-cart-lines></ul>
+          <p class="ship-note" data-ship-note></p>
+          <div class="ship-bar"><span></span></div>
+          <p class="cart__row"><span>Subtotale</span><b data-sub></b></p>
+          <p class="cart__row cart__row--muted"><span>Spedizione</span><span data-ship></span></p>
+          <p class="cart__row cart__row--total"><span>Totale</span><b data-total></b></p>
+          <p class="hint">Prezzi IVA inclusa.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+""")
+
+# ---------------------------------------------------------------- blog
+primo, *altri = ARTICOLI
+cats = sorted({a["cat"] for a in ARTICOLI})
+filtri = '<button type="button" class="filter is-on" data-cat="">Tutti</button>' + "".join(
+    f'<button type="button" class="filter" data-cat="{c}">{c}</button>' for c in cats)
+page("blog.html", "Blog · Aurum Sabinae",
+     "Notizie dalla raccolta, consigli per conservare l'olio, cultivar della Sabina e ricette dalla famiglia Altobelli.", f"""
+  <section class="section section--top" aria-labelledby="blog-page-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Blog</p>
+        <h1 id="blog-page-title" class="h-page">Notizie dal campo e dal frantoio</h1>
+        <p class="lead">La raccolta, le nostre varietà, come conservare l'olio e come usarlo in cucina.</p>
+      </div>
+      <article class="post post--feature">
+        <a class="post__img" href="articolo-{primo['slug']}.html" tabindex="-1" aria-hidden="true">
+          <img src="img/{primo['img']}" width="{primo['w']}" height="{primo['h']}" alt="" fetchpriority="high">
+        </a>
+        <div class="post__body">
+          <p class="post__meta"><span class="chip">{primo['cat']}</span><time datetime="{primo['data']}">{primo['data_it']}</time></p>
+          <h2><a href="articolo-{primo['slug']}.html">{escape(primo['titolo'])}</a></h2>
+          <p>{escape(primo['sommario'])}</p>
+          <a class="link-arrow" href="articolo-{primo['slug']}.html">Leggi l'articolo<svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+      </article>
+      <div class="filters" role="group" aria-label="Filtra per argomento">{filtri}</div>
+      <div class="post-grid" data-posts>
+        {''.join(blog_card(a, "h2").replace('<article class="post">', f'<article class="post" data-cat="{a["cat"]}">') for a in altri)}
+      </div>
+    </div>
+  </section>
+""", attivo="Blog")
+
+
+# ---------------------------------------------------------------- articoli
+def corpo(paragrafi):
+    out = []
+    for p in paragrafi:
+        out.append(f"<h2>{escape(p[3:])}</h2>" if p.startswith("## ") else f"<p>{escape(p)}</p>")
+    return "\n        ".join(out)
+
+
+for i, a in enumerate(ARTICOLI):
+    correlati = [x for x in ARTICOLI if x is not a][:3]
+    page(f"articolo-{a['slug']}.html", f"{a['titolo']} · Aurum Sabinae", a["sommario"], f"""
+  <article class="section section--top article" aria-labelledby="art-title">
+    <div class="wrap wrap--text">
+      <nav class="crumbs" aria-label="Percorso"><a href="index.html">Home</a><span aria-hidden="true">/</span><a href="blog.html">Blog</a><span aria-hidden="true">/</span><span>{a['cat']}</span></nav>
+      <p class="post__meta"><span class="chip">{a['cat']}</span><time datetime="{a['data']}">{a['data_it']}</time></p>
+      <h1 id="art-title" class="h-page">{escape(a['titolo'])}</h1>
+      <p class="lead">{escape(a['sommario'])}</p>
+    </div>
+    <div class="wrap wrap--media">
+      <img class="article__img" src="img/{a['img']}" width="{a['w']}" height="{a['h']}" alt="{escape(a['alt'])}" fetchpriority="high">
+    </div>
+    <div class="wrap wrap--text prose">
+        {corpo(a['testo'])}
+      <aside class="article__cta">
+        <p><b>Hai domande sui nostri oli?</b> Scrivici, ti risponde Leonardo.</p>
+        <a class="btn" href="{WA_INFO}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+      </aside>
+    </div>
+  </article>
+  <section class="section section--tint" aria-labelledby="altri-art">
+    <div class="wrap">
+      <div class="section-head section-head--row">
+        <h2 id="altri-art" class="h-sm">Altri articoli</h2>
+        <a class="link-arrow" href="blog.html">Tutti gli articoli<svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="post-grid">{''.join(blog_card(x) for x in correlati)}</div>
+    </div>
+  </section>
+""", attivo="Blog")

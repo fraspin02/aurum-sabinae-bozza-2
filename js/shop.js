@@ -126,7 +126,7 @@
     pd.innerHTML =
       '<div class="pd__media"><img src="img/' + p.img + '-' + p.imgW + '.webp" width="' + p.imgW + '" height="' + Math.round(p.imgW * 1.25) + '" alt="Bottiglia di ' + esc(p.name) + '"></div>' +
       '<div class="pd__info">' +
-        '<nav class="crumbs" aria-label="Percorso"><a href="index.html">Home</a> / <a href="index.html#shop">Shop</a> / <span>' + esc(p.name) + '</span></nav>' +
+        '<nav class="crumbs" aria-label="Percorso"><a href="index.html">Home</a><span aria-hidden="true">/</span><a href="index.html#shop">Shop</a><span aria-hidden="true">/</span><span>' + esc(p.name) + '</span></nav>' +
         '<span class="tag">' + p.tag + '</span>' +
         '<h1>' + esc(p.name) + '</h1>' +
         '<p class="pd__line">' + esc(p.line) + '</p>' +

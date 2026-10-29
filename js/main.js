@@ -4,13 +4,20 @@
   var mnav = document.getElementById('mobile-nav');
 
   if (btn && mnav) {
-    btn.addEventListener('click', function () {
-      var open = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', String(!open));
-      mnav.hidden = open;
-    });
+    var closeBtn = mnav.querySelector('.menu-close');
+    var setMenu = function (open) {
+      btn.setAttribute('aria-expanded', String(open));
+      mnav.hidden = !open;
+      document.body.classList.toggle('menu-open', open);
+      (open ? closeBtn : btn).focus();
+    };
+    btn.addEventListener('click', function () { setMenu(true); });
+    closeBtn.addEventListener('click', function () { setMenu(false); });
     mnav.addEventListener('click', function (e) {
-      if (e.target.closest('a')) { btn.setAttribute('aria-expanded', 'false'); mnav.hidden = true; }
+      if (e.target.closest('a')) setMenu(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !mnav.hidden) setMenu(false);
     });
   }
 

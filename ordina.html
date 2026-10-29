@@ -22,12 +22,16 @@
   <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
   <symbol id="i-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13 17 22l-5-3-5 3 1.5-9"/></symbol>
   <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></symbol>
 </svg>
 
 <a class="skip" href="#contenuto">Vai al contenuto</a>
 
 <header class="site-header" id="top">
   <div class="wrap">
+    <button class="icon-btn menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Apri il menu">
+      <svg aria-hidden="true"><use href="#i-menu"/></svg>
+    </button>
     <a class="brand" href="index.html" aria-label="Aurum Sabinae, home">
       <span class="brand__name">Aurum Sabinæ</span>
       <span class="brand__sub">Azienda Agricola Altobelli</span>
@@ -42,21 +46,35 @@
       </ul>
     </nav>
     <a class="btn header-cta" href="ordina.html" aria-current="page">Ordina</a>
-    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav">
-      <svg aria-hidden="true"><use href="#i-menu"/></svg>Menu
-    </button>
+    <a class="icon-btn phone-btn" href="tel:+393286268470" aria-label="Chiama il 328 626 8470">
+      <svg aria-hidden="true"><use href="#i-phone"/></svg>
+    </a>
   </div>
-  <nav class="mobile-nav" id="mobile-nav" aria-label="Menu mobile" hidden>
+</header>
+
+<div class="mobile-nav" id="mobile-nav" role="dialog" aria-modal="true" aria-label="Menu" hidden>
+  <div class="mobile-nav__top">
+    <button class="icon-btn menu-close" type="button" aria-label="Chiudi il menu">
+      <svg aria-hidden="true"><use href="#i-x"/></svg>
+    </button>
+    <span class="brand__name">Aurum Sabinæ</span>
+    <span class="icon-btn" aria-hidden="true"></span>
+  </div>
+  <nav aria-label="Menu mobile">
     <ul>
-      <li><a href="index.html#oli">Gli oli</a></li>
-      <li><a href="index.html#famiglia">La famiglia</a></li>
-      <li><a href="index.html#premi">Premi</a></li>
-      <li><a href="index.html#frutta">Frutta e orto</a></li>
-      <li><a href="index.html#dove">Dove trovarci</a></li>
-      <li><a href="ordina.html">Ordina</a></li>
+        <li><a href="index.html#oli">Gli oli</a></li>
+        <li><a href="index.html#famiglia">La famiglia</a></li>
+        <li><a href="index.html#premi">Premi</a></li>
+        <li><a href="index.html#frutta">Frutta e orto</a></li>
+        <li><a href="index.html#dove">Dove trovarci</a></li>
+      <li><a href="ordina.html" aria-current="page">Ordina</a></li>
     </ul>
   </nav>
-</header>
+  <div class="mobile-nav__contacts">
+    <a class="btn btn--ghost" href="tel:+393286268470"><svg aria-hidden="true"><use href="#i-phone"/></svg>Chiama</a>
+    <a class="btn" href="https://wa.me/393286268470" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+  </div>
+</div>
 
 <main id="contenuto">
   <section class="section" style="padding-top:clamp(2.5rem,6vw,4.5rem)" aria-labelledby="ordina-title">
@@ -179,10 +197,6 @@
   </div>
 </footer>
 
-<div class="quickbar">
-  <a class="btn btn--ghost" href="tel:+393286268470"><svg aria-hidden="true"><use href="#i-phone"/></svg>Chiama</a>
-  <a class="btn" href="https://wa.me/393286268470" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
-</div>
 
 <script src="js/main.js" defer></script>
 </body>

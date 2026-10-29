@@ -5,7 +5,7 @@ from pathlib import Path
 from articoli import ARTICOLI
 
 ROOT = Path(__file__).resolve().parent.parent
-V = "4"  # versione per la cache di css/js
+V = "5"  # versione per la cache di css/js
 TEL = "+393286268470"
 WA = "https://wa.me/393286268470"
 WA_INFO = WA + "?text=Buongiorno%2C%20vorrei%20informazioni%20sull%27olio%20Aurum%20Sabinae"
@@ -144,6 +144,13 @@ def page(nome, titolo, descr, body, home=False, attivo="", preload="", shop=True
   <title>{escape(titolo)}</title>
   <meta name="description" content="{escape(descr)}">
   <meta name="theme-color" content="#F3F3EC">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Aurum Sabinae">
+  <meta property="og:title" content="{escape(titolo)}">
+  <meta property="og:description" content="{escape(descr)}">
+  <meta property="og:image" content="https://fraspin02.github.io/aurum-sabinae-bozza-2/img/anteprima.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="{FONTS}" rel="stylesheet">

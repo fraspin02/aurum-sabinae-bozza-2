@@ -158,6 +158,7 @@ address { font-style: normal; }
 .hero__text { max-width: 640px; }
 .hero h1 { margin-bottom: .4em; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+@media (max-width: 599px) { .hero__actions .btn { flex: 1 1 100%; } }
 .hero__media { position: relative; margin: 0; justify-self: center; width: min(78vw, 420px); }
 .hero__media::before {
   content: ""; position: absolute; inset: 8% -10% -6% 12%; z-index: -1;

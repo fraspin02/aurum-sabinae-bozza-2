@@ -11,7 +11,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="img/hero-bottiglia-560.webp" imagesrcset="img/hero-bottiglia-560.webp 560w, img/hero-bottiglia-772.webp 772w" imagesizes="(min-width: 900px) 460px, 90vw">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" as="image" href="img/logo-altobelli.svg">
+  <link rel="stylesheet" href="css/style.css?v=3">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%233E4A24'/%3E%3Ctext x='16' y='22' font-family='Georgia' font-size='17' text-anchor='middle' fill='%23D9B65C'%3EA%3C/text%3E%3C/svg%3E">
 </head>
 <body>
@@ -30,26 +31,31 @@
 
 <header class="site-header" id="top">
   <div class="wrap">
-    <button class="icon-btn menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Apri il menu">
-      <svg aria-hidden="true"><use href="#i-menu"/></svg>
-    </button>
-    <a class="brand" href="index.html" aria-label="Aurum Sabinae, home">
-      <span class="brand__name">Aurum Sabinæ</span>
-      <span class="brand__sub">Azienda Agricola Altobelli</span>
+    <div class="header-left">
+      <button class="icon-btn menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Apri il menu">
+        <svg aria-hidden="true"><use href="#i-menu"/></svg>
+      </button>
+    </div>
+    <a class="brand" href="index.html" aria-label="Azienda Agricola Altobelli, Aurum Sabinae: home">
+      <img src="img/logo-altobelli.svg" width="470" height="210" alt="">
     </a>
     <nav class="nav" aria-label="Principale">
       <ul>
-        <li><a href="#oli">Gli oli</a></li>
+        <li><a href="#shop">Shop</a></li>
         <li><a href="#famiglia">La famiglia</a></li>
         <li><a href="#premi">Premi</a></li>
         <li><a href="#frutta">Frutta e orto</a></li>
         <li><a href="#dove">Dove trovarci</a></li>
       </ul>
     </nav>
-    <a class="btn header-cta" href="ordina.html">Ordina</a>
-    <a class="icon-btn phone-btn" href="tel:+393286268470" aria-label="Chiama il 328 626 8470">
-      <svg aria-hidden="true"><use href="#i-phone"/></svg>
-    </a>
+    <div class="header-right">
+      <a class="icon-btn phone-btn" href="tel:+393286268470" aria-label="Chiama il 328 626 8470">
+        <svg aria-hidden="true"><use href="#i-phone"/></svg><span class="phone-text">328 626 8470</span>
+      </a>
+      <a class="icon-btn cart-btn" href="cassa.html" aria-label="Carrello">
+        <svg aria-hidden="true"><use href="#i-bag"/></svg><span class="cart-count" data-cart-count hidden>0</span>
+      </a>
+    </div>
   </div>
 </header>
 
@@ -58,17 +64,17 @@
     <button class="icon-btn menu-close" type="button" aria-label="Chiudi il menu">
       <svg aria-hidden="true"><use href="#i-x"/></svg>
     </button>
-    <span class="brand__name">Aurum Sabinæ</span>
+    <a class="brand" href="index.html" aria-label="Home"><img src="img/logo-altobelli.svg" width="470" height="210" alt=""></a>
     <span class="icon-btn" aria-hidden="true"></span>
   </div>
   <nav aria-label="Menu mobile">
     <ul>
-        <li><a href="#oli">Gli oli</a></li>
+        <li><a href="#shop">Shop</a></li>
         <li><a href="#famiglia">La famiglia</a></li>
         <li><a href="#premi">Premi</a></li>
         <li><a href="#frutta">Frutta e orto</a></li>
         <li><a href="#dove">Dove trovarci</a></li>
-      <li><a href="ordina.html">Ordina</a></li>
+      <li><a href="cassa.html">Carrello e cassa</a></li>
     </ul>
   </nav>
   <div class="mobile-nav__contacts">
@@ -86,7 +92,7 @@
         <h1 id="hero-title">L'olio della Sabina, coltivato dalla stessa <em>famiglia</em> dagli anni '50</h1>
         <p class="lead">Raccolta precoce, spremitura immediata, conservazione senza ossigeno. Oli DOP, monocultivar e frutta di stagione dai nostri terreni di Montelibretti.</p>
         <div class="hero__actions">
-          <a class="btn" href="#oli">Scopri gli oli</a>
+          <a class="btn" href="#shop"><svg aria-hidden="true"><use href="#i-bag"/></svg>Acquista l'olio</a>
           <a class="btn btn--ghost" href="https://wa.me/393286268470?text=Buongiorno%2C%20vorrei%20informazioni%20sull%27olio%20Aurum%20Sabinae" target="_blank" rel="noopener">
             <svg aria-hidden="true"><use href="#i-wa"/></svg>Scrivici su WhatsApp
           </a>
@@ -132,103 +138,27 @@
     </div>
   </section>
 
-  <section class="section oils" id="oli" aria-labelledby="oli-title">
+  <section class="section oils" id="shop" aria-labelledby="shop-title">
     <div class="wrap">
       <div class="section-head reveal">
-        <p class="eyebrow">I nostri oli</p>
-        <h2 id="oli-title">Cinque oli, una sola terra</h2>
+        <p class="eyebrow">Shop</p>
+        <h2 id="shop-title">I nostri oli, dal frantoio a casa tua</h2>
         <p class="lead">Leccino, Carboncella, Frantoio e Salviana: le varietà della Sabina, raccolte tra ottobre e novembre.</p>
       </div>
-
-      <div class="oil-grid">
-        <article class="oil reveal">
-          <div class="oil__img"><img src="img/primo-raccolto-480.webp" srcset="img/primo-raccolto-480.webp 480w, img/primo-raccolto-760.webp 760w" sizes="(min-width: 1000px) 370px, (min-width: 620px) 45vw, 92vw" width="480" height="600" alt="Bottiglia di Aurum Sabinae Primo Raccolto" loading="lazy"></div>
-          <div class="oil__body">
-            <span class="tag">Sabina DOP</span>
-            <h3>Primo Raccolto <small>Aurum Sabinae</small></h3>
-            <p class="award"><svg aria-hidden="true"><use href="#i-award"/></svg>Orciolo d'Oro 2012, Distinzione</p>
-            <p>Il primo olio della stagione: olive raccolte in anticipo, per un fruttato medio e leggero.</p>
-            <dl class="specs">
-              <dt>Cultivar</dt><dd>Leccino 70%, Carboncella</dd>
-              <dt>Raccolta</dt><dd>Anticipata</dd>
-              <dt>Fruttato</dt><dd>Medio / leggero</dd>
-            </dl>
-            <a class="btn btn--ghost" href="ordina.html#primo-raccolto">Aggiungi alla richiesta</a>
-          </div>
-        </article>
-
-        <article class="oil reveal">
-          <div class="oil__img"><img src="img/aurum-sabinae-480.webp" srcset="img/aurum-sabinae-480.webp 480w, img/aurum-sabinae-760.webp 760w" sizes="(min-width: 1000px) 370px, (min-width: 620px) 45vw, 92vw" width="480" height="600" alt="Bottiglia di Aurum Sabinae Sabina DOP" loading="lazy"></div>
-          <div class="oil__body">
-            <span class="tag">Sabina DOP</span>
-            <h3>Aurum Sabinae <small>il blend della casa</small></h3>
-            <p class="award"><svg aria-hidden="true"><use href="#i-award"/></svg>Orciolo d'Oro 2012, Distinzione</p>
-            <p>L'olio che racconta la Sabina: quattro varietà del territorio raccolte nel mese di ottobre.</p>
-            <dl class="specs">
-              <dt>Cultivar</dt><dd>Leccino, Carboncella, Frantoio, Salviana</dd>
-              <dt>Raccolta</dt><dd>Ottobre</dd>
-              <dt>Estrazione</dt><dd>A freddo</dd>
-            </dl>
-            <a class="btn btn--ghost" href="ordina.html#aurum-sabinae">Aggiungi alla richiesta</a>
-          </div>
-        </article>
-
-        <article class="oil reveal">
-          <div class="oil__img"><img src="img/pepite-carboncella-480.webp" srcset="img/pepite-carboncella-480.webp 480w, img/pepite-carboncella-760.webp 760w" sizes="(min-width: 1000px) 370px, (min-width: 620px) 45vw, 92vw" width="480" height="600" alt="Bottiglia di Pepite d'Aurum monocultivar" loading="lazy"></div>
-          <div class="oil__body">
-            <span class="tag">Monocultivar n°1</span>
-            <h3>Pepite d'Aurum <small>Carboncella</small></h3>
-            <p class="award"><svg aria-hidden="true"><use href="#i-award"/></svg>Aipo d'Argento 2014, Gran Menzione</p>
-            <p>Solo olive di Carboncella, varietà rustica tipica della Sabina, raccolte a inizio novembre.</p>
-            <dl class="specs">
-              <dt>Cultivar</dt><dd>Carboncella 100%</dd>
-              <dt>Raccolta</dt><dd>Inizio novembre</dd>
-              <dt>Estrazione</dt><dd>A freddo</dd>
-            </dl>
-            <a class="btn btn--ghost" href="ordina.html#pepite-carboncella">Aggiungi alla richiesta</a>
-          </div>
-        </article>
-
-        <article class="oil oil--feature reveal">
-          <div class="oil__img"><img src="img/pepite-frantoio-480.webp" srcset="img/pepite-frantoio-480.webp 480w, img/pepite-frantoio-640.webp 640w" sizes="(min-width: 1000px) 370px, (min-width: 620px) 45vw, 92vw" width="480" height="599" alt="Bottiglia di Pepite d'Aurum monocultivar Frantoio" loading="lazy"></div>
-          <div class="oil__body">
-            <span class="tag">Monocultivar n°2</span>
-            <h3>Pepite d'Aurum <small>Frantoio</small></h3>
-            <p class="award"><svg aria-hidden="true"><use href="#i-award"/></svg>"Grande Olio" Slow Food 2016</p>
-            <p>Solo olive di Frantoio, varietà dal gusto pieno, raccolte a fine ottobre.</p>
-            <dl class="specs">
-              <dt>Cultivar</dt><dd>Frantoio 100%</dd>
-              <dt>Raccolta</dt><dd>Fine ottobre</dd>
-              <dt>Estrazione</dt><dd>A freddo</dd>
-            </dl>
-            <a class="btn btn--ghost" href="ordina.html#pepite-frantoio">Aggiungi alla richiesta</a>
-          </div>
-        </article>
-
-        <article class="oil reveal">
-          <div class="oil__img"><img src="img/rucolio-480.webp" srcset="img/rucolio-480.webp 480w, img/rucolio-700.webp 700w" sizes="(min-width: 1000px) 370px, (min-width: 620px) 45vw, 92vw" width="480" height="600" alt="Bottiglia di RucOlio, olio con rucola selvatica" loading="lazy"></div>
-          <div class="oil__body">
-            <span class="tag">Con erbe selvatiche</span>
-            <h3>RucOlio <small>olive e rucola selvatica</small></h3>
-            <p>Olive macinate insieme alla rucola selvatica fresca, quella che cresce spontanea sotto i nostri ulivi.</p>
-            <dl class="specs">
-              <dt>Lavorazione</dt><dd>Frangitura con rucola fresca</dd>
-              <dt>Dal</dt><dd>2013</dd>
-              <dt>Estrazione</dt><dd>A freddo</dd>
-            </dl>
-            <a class="btn btn--ghost" href="ordina.html#rucolio">Aggiungi alla richiesta</a>
-          </div>
-        </article>
-
-        <article class="oil reveal" style="justify-content:center;background:transparent;border-style:dashed">
-          <div class="oil__body" style="justify-content:center">
-            <p class="eyebrow">Per famiglie, ristoranti e GAS</p>
-            <h3>Spedizioni e gruppi d'acquisto</h3>
-            <p>Spediamo i nostri oli e prepariamo forniture per gruppi d'acquisto e ristoranti. Chiamaci per quantità e disponibilità.</p>
-            <a class="btn" href="tel:+393286268470" style="margin-top:auto"><svg aria-hidden="true"><use href="#i-phone"/></svg>328 626 8470</a>
-          </div>
-        </article>
-      </div>
+      <ul class="perks-row reveal">
+        <li><svg aria-hidden="true"><use href="#i-truck"/></svg><span><b>Spedizione in tutta Italia</b>gratuita sopra 59 €</span></li>
+        <li><svg aria-hidden="true"><use href="#i-leaf"/></svg><span><b>Dal produttore</b>senza intermediari</span></li>
+        <li><svg aria-hidden="true"><use href="#i-lock"/></svg><span><b>Pagamento sicuro</b>carta, PayPal, bonifico</span></li>
+      </ul>
+      <div class="shop-grid" data-shop></div>
+      <aside class="b2b reveal">
+        <div>
+          <p class="eyebrow">Per ristoranti, botteghe e GAS</p>
+          <h3>Forniture e gruppi d'acquisto</h3>
+          <p>Prepariamo forniture per ristoranti, negozi e gruppi d'acquisto. Chiamaci per quantità, formati e listino.</p>
+        </div>
+        <a class="btn btn--ghost" href="tel:+393286268470"><svg aria-hidden="true"><use href="#i-phone"/></svg>328 626 8470</a>
+      </aside>
     </div>
   </section>
 
@@ -240,7 +170,7 @@
         <h2 id="novello-title">Spremute, il nostro olio novello</h2>
         <p>Per chi aspetta da giorni la prima bruschetta dell'anno: olio freschissimo, torbido e denso, appena uscito dal frantoio.</p>
         <p>Disponibile solo nelle settimane della raccolta, finché dura.</p>
-        <a class="btn btn--light" href="https://wa.me/393286268470?text=Buongiorno%2C%20vorrei%20prenotare%20l%27olio%20novello%20Spremute" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Prenota il novello</a>
+        <button class="btn btn--light" type="button" data-reserve><svg aria-hidden="true"><use href="#i-bag"/></svg>Prenota il novello</button>
       </div>
     </div>
   </section>
@@ -396,7 +326,7 @@
           <h3>Spedizioni e GAS</h3>
           <address>In tutta Italia</address>
           <p>Spedizioni, gruppi d'acquisto e forniture: contattaci per quantità e tempi.</p>
-          <a class="link-arrow" href="ordina.html"><svg aria-hidden="true"><use href="#i-arrow"/></svg>Prepara una richiesta</a>
+          <a class="link-arrow" href="#shop"><svg aria-hidden="true"><use href="#i-arrow"/></svg>Vai allo shop</a>
         </div>
       </div>
     </div>
@@ -426,9 +356,29 @@
 
 </main>
 
+<div class="cart" id="cart" hidden>
+  <div class="cart__backdrop"></div>
+  <aside class="cart__panel" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+    <div class="cart__head">
+      <h2 id="cart-title">Il tuo carrello</h2>
+      <button class="icon-btn cart__close" type="button" aria-label="Chiudi il carrello"><svg aria-hidden="true"><use href="#i-x"/></svg></button>
+    </div>
+    <p class="ship-note" data-ship-note></p>
+    <div class="ship-bar"><span></span></div>
+    <ul class="cart__lines" data-cart-lines></ul>
+    <div class="cart__foot">
+      <p class="cart__row"><span>Subtotale</span><b data-sub>0,00 €</b></p>
+      <p class="cart__row cart__row--muted"><span>Spedizione</span><span data-ship>Gratis</span></p>
+      <a class="btn btn--block" href="cassa.html" data-checkout><svg aria-hidden="true"><use href="#i-lock"/></svg>Vai alla cassa</a>
+      <button class="link-btn cart__close" type="button">Continua gli acquisti</button>
+    </div>
+  </aside>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
 <footer class="site-footer">
   <div class="wrap">
-    <img src="img/logo-altobelli.png" width="480" height="252" alt="Azienda Agricola Altobelli" loading="lazy">
+    <img src="img/logo-altobelli.svg" width="470" height="210" alt="Azienda Agricola Altobelli" loading="lazy">
     <div>
       <p><strong style="color:#E9E3D2">Aurum Sabinae</strong> · Azienda Agricola Altobelli Leonardo</p>
       <p>Via Dante Alighieri 23, 00010 Montelibretti (RM)</p>
@@ -443,6 +393,7 @@
 </footer>
 
 
-<script src="js/main.js" defer></script>
+<script src="js/main.js?v=3" defer></script>
+<script src="js/shop.js?v=3" defer></script>
 </body>
 </html>

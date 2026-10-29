@@ -1,0 +1,19 @@
+{
+  "brand": "Aurum Sabinae — Azienda Agricola Altobelli Leonardo",
+  "mode": "observed",
+  "product_type": "small farm producer website, extra virgin olive oil and fruit",
+  "industry": "agrifood, olive oil, Sabina DOP",
+  "locale": "it-IT",
+  "audience": ["Roman food lovers buying direct", "gruppi d'acquisto", "restaurants and delis", "gift buyers"],
+  "conversion_surface": ["phone", "whatsapp", "market stall Mercato Trieste Roma", "email"],
+  "style_keywords": ["editorial", "organic", "heritage", "warm", "premium artisanal", "minimal"],
+  "palette": {
+    "surface": {"hex": "#F6F1E6", "origin": "proposed"},
+    "text": {"hex": "#1E2316", "origin": "proposed"},
+    "olive": {"hex": "#3E4A24", "origin": "inferred", "source": "logo green"},
+    "gold": {"hex": "#9A7420", "origin": "inferred", "source": "label gold"},
+    "legacy_theme_accent": {"hex": "#c72c00", "origin": "observed", "note": "WordPress theme default, not brand"}
+  },
+  "type": {"display": "Cormorant Garamond (proposed)", "body": "Source Sans 3 (proposed)"},
+  "stack": "static HTML/CSS/JS"
+}
